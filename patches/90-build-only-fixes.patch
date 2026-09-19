@@ -1,0 +1,37 @@
+diff --git a/bsp/drivers/input/ctp/Kconfig b/bsp/drivers/input/ctp/Kconfig
+index 59c89b7b8..a3b88bac8 100644
+--- a/bsp/drivers/input/ctp/Kconfig
++++ b/bsp/drivers/input/ctp/Kconfig
+@@ -13,7 +13,7 @@ menuconfig AW_INPUT_CTP
+ 
+ if AW_INPUT_CTP
+ 
+-source "bsp/drivers/input/ctp/gt9xx_secondary//Kconfig"
++source "bsp/drivers/input/ctp/gt9xx_secondary/Kconfig"
+ source "bsp/drivers/input/ctp/gslx680new/Kconfig"
+ source "bsp/drivers/input/ctp/wacom_pen/Kconfig"
+ source "bsp/drivers/input/ctp/gt9xxnew/Kconfig"
+diff --git a/bsp/drivers/ve/cedar-ve/Makefile b/bsp/drivers/ve/cedar-ve/Makefile
+index 8203732fa..9b3f56034 100644
+--- a/bsp/drivers/ve/cedar-ve/Makefile
++++ b/bsp/drivers/ve/cedar-ve/Makefile
+@@ -27,5 +27,5 @@ endif
+ 
+ # build video codec to sunxi-ve.
+ ifeq ($(or $(CONFIG_AW_VIDEO_KERNEL_ENC), $(CONFIG_AW_VIDEO_KERNEL_DEC)), y)
+-include $(src)/codec/Makefile
++include $(srctree)/$(src)/codec/Makefile
+ endif
+diff --git a/bsp/drivers/ve/cedar-ve/codec/Makefile b/bsp/drivers/ve/cedar-ve/codec/Makefile
+index 1c9881ab8..49ae43065 100644
+--- a/bsp/drivers/ve/cedar-ve/codec/Makefile
++++ b/bsp/drivers/ve/cedar-ve/codec/Makefile
+@@ -3,7 +3,7 @@
+ codec_dir = ${src}/codec
+ codec_lib_dir = codec/lib
+ codec_mem_dir = codec/memory
+-codec_abs_dir = $(PWD)/${src}/codec
++codec_abs_dir = $(srctree)/${src}/codec
+ EXTRA_CFLAGS += -I$(codec_abs_dir)/lib/include
+ # EXTRA_CFLAGS += -I$(codec_abs_dir)/memory/kernelMemory -I$(codec_abs_dir)/memory/ionMemory \
+ 	#   -I$(codec_abs_dir)/memory/kernelMemory/ion_mem

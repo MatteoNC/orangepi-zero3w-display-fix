@@ -1,0 +1,12 @@
+diff --git a/bsp/drivers/drm/sunxi_drm_edp.c b/bsp/drivers/drm/sunxi_drm_edp.c
+index 796b5e251..f4518118c 100644
+--- a/bsp/drivers/drm/sunxi_drm_edp.c
++++ b/bsp/drivers/drm/sunxi_drm_edp.c
+@@ -4214,6 +4214,7 @@ static void sunxi_edp_encoder_atomic_enable(struct drm_encoder *encoder,
+ 	disp_cfg.pixel_mode = edp_core->pixel_mode;
+ 
+ 	sunxi_tcon_mode_init(drm_edp->sdrm.tcon_dev, &disp_cfg);
++	edp_de_attach(drm_edp->desc->hw_id, de_id);
+ 
+ 	if (drm_edp->sdrm.panel)
+ 		drm_panel_prepare(drm_edp->sdrm.panel);

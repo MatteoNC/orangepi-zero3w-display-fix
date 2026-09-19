@@ -1,0 +1,20 @@
+diff --git a/bsp/drivers/drm/sunxi_device/hardware/lowlevel_de/sunxi_de.c b/bsp/drivers/drm/sunxi_device/hardware/lowlevel_de/sunxi_de.c
+index 7be8f6a83..19c9817b4 100644
+--- a/bsp/drivers/drm/sunxi_device/hardware/lowlevel_de/sunxi_de.c
++++ b/bsp/drivers/drm/sunxi_device/hardware/lowlevel_de/sunxi_de.c
+@@ -728,7 +728,14 @@ void sunxi_de_atomic_flush(struct sunxi_de_out *hwde, struct de_backend_data *da
+ 
+ 		if (engine->de_devfreq_auto)
+ 			sunxi_de_auto_calc_freq_and_apply(engine->display_out);
+-		// de_top_update_force_by_ahb(engine->top_hdl);
++		/*
++		 * SUN60IW2 workaround: RCQ completes on DE1 without applying the
++		 * plane register blocks. Copy only dirty shadow blocks through AHB
++		 * before issuing the normal RCQ update.
++		 */
++		if (hwde->id == 1) {
++			de_update_ahb(hwde);
++		}
+ 
+ 		if (engine->match_data->rcq_wait_line)
+ 			rcq_update_timer_start(hwde);

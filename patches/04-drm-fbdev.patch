@@ -1,0 +1,43 @@
+diff --git a/bsp/drivers/drm/sunxi_drm_drv.c b/bsp/drivers/drm/sunxi_drm_drv.c
+index 3bcafc078..8818817d7 100644
+--- a/bsp/drivers/drm/sunxi_drm_drv.c
++++ b/bsp/drivers/drm/sunxi_drm_drv.c
+@@ -17,6 +17,7 @@
+ #include <drm/drm_crtc_helper.h>
+ #include <drm/drm_drv.h>
+ #include <drm/drm_fb_helper.h>
++#include <drm/drm_fbdev_dma.h>
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(5, 19, 0)
+ #include <drm/drm_gem_cma_helper.h>
+ #else
+@@ -179,7 +180,7 @@ static int sunxi_drm_atomic_helper_commit(struct drm_device *dev,
+ static const struct drm_mode_config_funcs sunxi_drm_mode_config_funcs = {
+ 	.atomic_check = drm_atomic_helper_check,
+ 	.atomic_commit = sunxi_drm_atomic_helper_commit,
+-	/* .output_poll_changed = drm_fb_helper_output_poll_changed, */
++	.output_poll_changed = drm_fb_helper_output_poll_changed,
+ 	.fb_create = sunxi_drm_gem_fb_create,
+ };
+ 
+@@ -1238,7 +1239,6 @@ struct proc_dir_entry *sunxi_drm_get_procfs_dir(void)
+ 
+ #endif
+ 
+-int sunxi_drm_fbdev_init(struct drm_device *dev);
+ 
+ static int sunxi_drm_bind(struct device *dev)
+ {
+@@ -1299,7 +1299,12 @@ static int sunxi_drm_bind(struct device *dev)
+ 
+ dev_register:
+ 	ret = drm_dev_register(drm, 0);
+-	//sunxi_drm_fbdev_init(drm);
++	if (ret) {
++		DRM_ERROR("drm_dev_register failed %d\n", ret);
++		goto mode_config_clean;
++	}
++
++	drm_fbdev_dma_setup(drm, 32);
+ 
+ #if IS_ENABLED(CONFIG_PROC_FS)
+ 	ret = sunxi_drm_procfs_init(drm);

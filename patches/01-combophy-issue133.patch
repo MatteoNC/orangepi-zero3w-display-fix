@@ -1,0 +1,12 @@
+diff --git a/bsp/drivers/phy/sunxi-cadence-combophy.c b/bsp/drivers/phy/sunxi-cadence-combophy.c
+index 94c651e36..2851a0e3e 100755
+--- a/bsp/drivers/phy/sunxi-cadence-combophy.c
++++ b/bsp/drivers/phy/sunxi-cadence-combophy.c
+@@ -1931,6 +1931,7 @@ static int combo0_configure_usb_dp(struct sunxi_cadence_combophy *combo0)
+ 	val &= ~(PHY0_IDDQ_EN_SEL | PHY0_IDDQ_EN_SOFT);
+ 	writel(val, COMB0_REG_PHYPINS_LINK_CTRL2(combo0->top_reg));
+ 
++	phy_writew(combo0->phy_reg + (0xE003 << 1), 0x0003);
+ 	phy_writew(combo0->phy_reg + (0xE005 << 1), 0x0003);
+ 	phy_writew(combo0->phy_reg + (0xE006 << 1), 0x1124);
+ 	if (combo0->orientation == TYPEC_ORIENTATION_REVERSE) {
